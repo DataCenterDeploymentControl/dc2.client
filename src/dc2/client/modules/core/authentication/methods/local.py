@@ -25,9 +25,9 @@ try:
 except ImportError as e:
     raise(e)
 
-__all__ = ['LocalAuth']
+__all__ = []
 
-from ..auth_types import register_auth_methods
+from dc2.client.app.globals import register_auth_methods
 
 
 def local_login(email=None, password=None):
@@ -39,16 +39,5 @@ def local_login(email=None, password=None):
         }
         return login
     return None
-
-
-class LocalAuth(AuthBase):
-    def __init__(self, token=None, username=None):
-        self._token = token
-        self._username = username
-
-    def __call__(self, r):
-        r.headers['X-DC2-Auth-Token'] = self._token
-        r.headers['X-DC2-Auth-Username'] = self._username
-        return r
 
 register_auth_methods('local', local_login)

@@ -19,6 +19,8 @@
 #
 
 __author__ = 'stephan.adig'
+
+
 from .. import add_output_format
 
 def output_text(result, message):

@@ -20,6 +20,7 @@
 
 __author__ = 'stephan.adig'
 
+__all__ = ['PARSER', 'SUBPARSERS', 'output', 'DC2_EXTERNAL_CLIENT_MODULES', 'CONFIG']
 import os
 import os.path
 
@@ -28,36 +29,25 @@ try:
 except ImportError as e:
     raise e
 
-from dc2.client.cli import PARSER
+from dc2.client.cli import PARSER, SUBPARSERS, output, OUTPUT_FORMATS
 from .globals import DC2_EXTERNAL_CLIENT_MODULES
-from .globals import CONFIGURATION
+from .globals import CONFIG
+from .globals import AUTH_TYPES
+
+from .api import API
 
 def main():
     create_argparser()
-    _load_external_modules()
-    _init_external_modules()
     args = PARSER.parse_args()
-    result = args.func(args)
+    api = None
     if args.config_file is not None:
-        pass
-    elif os.path.exists(os.path.expanduser('~/.dc2-client.cfg')):
-        pass
+        CONFIG.set_filenames([args.config_file])
     else:
-        pass
+        CONFIG.set_filenames(['default.yaml', os.path.expanduser('~/.dc2-client/default.yaml')])
+        api = API(CONFIG)
+    result = args.func(args, api)
     if result is False:
         return(-1)
-
-
-def _load_external_modules():
-    print('Loading Modules...')
-    for entry in iter_entry_points('dc2.client.modules', name=None):
-        print('Loading {0}'.format(entry.name))
-        DC2_EXTERNAL_CLIENT_MODULES.append(entry.load())
-
-
-def _init_external_modules():
-    for module in DC2_EXTERNAL_CLIENT_MODULES:
-        module()
 
 
 def create_argparser():
@@ -66,7 +56,7 @@ def create_argparser():
         action="store",
         dest="dc2_backend_url",
         default="http://localhost:5000/api",
-        required=True,
+        required=False,
         metavar="URL",
         help="DC2 Backend URL")
     PARSER.add_argument(
@@ -78,4 +68,15 @@ def create_argparser():
         required=False,
         metavar='FILE',
         help="Configuration File"
+    )
+    PARSER.add_argument(
+        '--format',
+        action="store",
+        dest='output_format',
+        default="text",
+        required=False,
+        choices=OUTPUT_FORMATS.keys(),
+        metavar="{0}".format([key for key in OUTPUT_FORMATS.keys()]),
+        help='Choose the output format'
+
     )

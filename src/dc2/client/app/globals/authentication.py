@@ -20,16 +20,14 @@
 
 __author__ = 'stephan.adig'
 
-__all__ = ['DC2_EXTERNAL_CLIENT_MODULES', 'CONFIG', 'AUTH_TYPES', 'register_auth_methods']
+__all__ = ['AUTH_TYPES', 'register_auth_methods']
 
-from ..configuration import Configuration
-from .authentication import AUTH_TYPES, register_auth_methods
-from .external_modules import load_external_modules, init_external_modules
-from ...cli import OUTPUT_FORMATS
+AUTH_TYPES = {}
 
-DC2_EXTERNAL_CLIENT_MODULES = load_external_modules()
-init_external_modules(DC2_EXTERNAL_CLIENT_MODULES)
+def register_auth_methods(auth_type=None, auth_type_callback=None):
+    if auth_type is not None and auth_type_callback is not None:
+        if auth_type not in AUTH_TYPES.keys():
+            AUTH_TYPES[auth_type] = auth_type_callback
+    else:
+        raise ValueError('auth_types and/or auth_type_callback is/are not set')
 
-CONFIG = Configuration(['default.yaml'])
-
-from ...modules.core import *

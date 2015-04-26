@@ -29,7 +29,7 @@ if 'OUTPUT_FORMATS' not in globals():
 
 def add_output_format(format_name, format_func):
     if format_name not in OUTPUT_FORMATS.keys():
-        OUTPUT_FORMATS['format_name'] = format_func
+        OUTPUT_FORMATS[format_name] = format_func
 
 from .default_formats import *
 

@@ -20,16 +20,27 @@
 
 __author__ = 'stephan.adig'
 
-__all__ = ['DC2_EXTERNAL_CLIENT_MODULES', 'CONFIG', 'AUTH_TYPES', 'register_auth_methods']
+try:
+    import requests
+except ImportError as e:
+    raise e
 
-from ..configuration import Configuration
-from .authentication import AUTH_TYPES, register_auth_methods
-from .external_modules import load_external_modules, init_external_modules
-from ...cli import OUTPUT_FORMATS
 
-DC2_EXTERNAL_CLIENT_MODULES = load_external_modules()
-init_external_modules(DC2_EXTERNAL_CLIENT_MODULES)
+class Users(object):
 
-CONFIG = Configuration(['default.yaml'])
+    _MODULE_NAME_ = 'admin'
+    _RESOURCE_NAME = 'users'
 
-from ...modules.core import *
+    def __init__(self, api=None):
+        if api is None:
+            raise ValueError('api instance can not be None')
+        self._api = api
+
+    def userlist(self, username=None, email=None):
+        if username is None and email is None:
+            url = self._api.url(self._MODULE_NAME_, self._RESOURCE_NAME)
+            response = self._api.do_request(url, 'GET', auth=True)
+            if response is not None:
+                return (True, response)
+            else:
+                return (False, 'Error')

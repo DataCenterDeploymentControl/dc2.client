@@ -22,14 +22,14 @@ __author__ = 'stephan.adig'
 
 import argparse
 
-__all__ = ['PARSER', 'SUBPARSERS', 'output']
+__all__ = ['PARSER', 'SUBPARSERS', 'output', 'OUTPUT_FORMATS']
 
 from .outputformats import OUTPUT_FORMATS
 PARSER = argparse.ArgumentParser()
 SUBPARSERS = PARSER.add_subparsers(title="Modules")
 SUBPARSERS.required = False
 
-
+print(OUTPUT_FORMATS)
 def output(result, message, format="text"):
     if format in OUTPUT_FORMATS.keys():
         OUTPUT_FORMATS[format](result, message)

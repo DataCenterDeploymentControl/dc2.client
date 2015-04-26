@@ -20,14 +20,22 @@
 
 __author__ = 'stephan.adig'
 
-__all__ = []
 
-AUTH_TYPES = {}
+from .. import add_output_format
+
+def output_text(result, message):
+    if result is False:
+        print("Error: {0}".format(message))
+        return
+    if isinstance(message, list):
+        counter = 0
+        for item in message:
+            for key in item.keys():
+                if isinstance(item[key], list):
+                    print("{0}_{1}=\"{2}\"".format(key.upper(), counter, ' '.join(item[key])))
+                else:
+                    print("{0}_{1}=\"{2}\"".format(key.upper(), counter, item[key]))
+            counter += 1
 
 
-def register_auth_methods(auth_type=None, auth_type_callback=None):
-    if auth_type is not None and auth_type_callback is not None:
-        if auth_type not in AUTH_TYPES.keys():
-            AUTH_TYPES[auth_type] = auth_type_callback
-    else:
-        raise ValueError('auth_types and/or auth_type_callback is/are not set')
+add_output_format('bash', output_text)

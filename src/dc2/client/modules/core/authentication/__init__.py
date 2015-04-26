@@ -20,4 +20,9 @@
 
 __author__ = 'stephan.adig'
 
-from .auth_types import AUTH_TYPES, register_auth_methods
+__all__ = []
+
+
+
+from .methods import *
+

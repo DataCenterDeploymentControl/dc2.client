@@ -19,3 +19,5 @@
 #
 
 __author__ = 'stephan.adig'
+
+from .local import *

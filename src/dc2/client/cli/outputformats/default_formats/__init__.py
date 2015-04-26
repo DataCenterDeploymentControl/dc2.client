@@ -19,3 +19,6 @@
 #
 
 __author__ = 'stephan.adig'
+from .format_text import *
+from .format_json import *
+from .format_bash import *

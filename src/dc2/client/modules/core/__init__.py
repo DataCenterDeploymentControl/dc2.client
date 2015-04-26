@@ -19,3 +19,12 @@
 #
 
 __author__ = 'stephan.adig'
+
+__all__ = []
+
+from dc2.client.cli import SUBPARSERS
+
+from .usersgroups import create_parser
+from .authentication import *
+
+create_parser(SUBPARSERS)

@@ -20,16 +20,13 @@
 
 __author__ = 'stephan.adig'
 
-__all__ = ['DC2_EXTERNAL_CLIENT_MODULES', 'CONFIG', 'AUTH_TYPES', 'register_auth_methods']
+import json
+from .. import add_output_format
 
-from ..configuration import Configuration
-from .authentication import AUTH_TYPES, register_auth_methods
-from .external_modules import load_external_modules, init_external_modules
-from ...cli import OUTPUT_FORMATS
+def output_text(result, message):
+    if result is False:
+        print("Error: {0}".format(json.dumps(message)))
+        return
+    print(json.dumps(message))
 
-DC2_EXTERNAL_CLIENT_MODULES = load_external_modules()
-init_external_modules(DC2_EXTERNAL_CLIENT_MODULES)
-
-CONFIG = Configuration(['default.yaml'])
-
-from ...modules.core import *
+add_output_format('json', output_text)

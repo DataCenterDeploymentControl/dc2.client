@@ -20,16 +20,23 @@
 
 __author__ = 'stephan.adig'
 
-__all__ = ['DC2_EXTERNAL_CLIENT_MODULES', 'CONFIG', 'AUTH_TYPES', 'register_auth_methods']
+__all__ = ['load_external_modules', 'init_external_modules']
 
-from ..configuration import Configuration
-from .authentication import AUTH_TYPES, register_auth_methods
-from .external_modules import load_external_modules, init_external_modules
-from ...cli import OUTPUT_FORMATS
+try:
+    from pkg_resources import iter_entry_points
+except ImportError as e:
+    raise e
 
-DC2_EXTERNAL_CLIENT_MODULES = load_external_modules()
-init_external_modules(DC2_EXTERNAL_CLIENT_MODULES)
 
-CONFIG = Configuration(['default.yaml'])
+def load_external_modules():
+    print('Loading Modules...')
+    external_modules = []
+    for entry in iter_entry_points('dc2.client.modules', name=None):
+        print('Loading {0}'.format(entry.name))
+        external_modules.append(entry.load())
+    return external_modules
 
-from ...modules.core import *
+
+def init_external_modules(external_modules=[]):
+    for module in external_modules:
+        module()

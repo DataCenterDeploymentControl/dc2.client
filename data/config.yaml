@@ -1,0 +1,9 @@
+default:
+  connection:
+    dc2_backend_url: http://localhost:5000/api
+    api_version: v1
+  authentication:
+    email: admin@domain.tld
+    password: RxurySXrcs3v
+    auth_method: local
+    auth_cache_dir: ~/.dc2-client
