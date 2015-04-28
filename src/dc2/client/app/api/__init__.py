@@ -151,41 +151,26 @@ class API(object):
                     self._check_authentication()
                 else:
                     self._auth = auth_obj
-            if method.lower() == 'get':
-                request_done = False
-                while not request_done:
-                    response = requests.get(url, params=data, auth=self._auth)
-                    if response.status_code == 401:
-                        if auth:
-                            self._authenticated = False
-                            self._auth = None
-                            self._check_authentication()
-                        else:
-                            # TODO: Return error
-                            request_done = True
-                    elif 200 <= response.status_code < 300:
-                        request_done = True
-                        return response.json()
-
-            if method.lower() == 'post':
-                try:
-                    payload = json.dumps(data)
-                    response = requests.get(url, data=payload, **extras)
-                    return response
-                except Exception as e:
-                    return None
-            if method.lower() == 'put':
-                try:
-                    payload = json.dumps(data)
-                    response = requests.put(url, data=payload, **extras)
-                    return response
-                except Exception as e:
-                    return None
-            if method.lower() == 'delete':
-                try:
-                    payload = json.dumps(data)
-                    response = requests.delete(url, data=payload, **extras)
-                except Exceptionas as e:
-                    return None
+            request_done = False
+            while not request_done:
+                if method.lower() == 'get':
+                    response = requests.get(url, params=data, auth=self._auth, headers=self.HEADERS)
+                if method.lower() == 'post':
+                    response = requests.post(url, data=json.dumps(data), auth=self._auth, headers=self.HEADERS)
+                if method.lower() == 'put':
+                    pass
+                if method.lower() == 'delete':
+                    pass
+                if response.status_code == 401:
+                    if auth:
+                        self._authenticated = False
+                        self._auth = None
+                        self._check_authentication()
+                elif 200 <= response.status_code < 300:
+                    request_done = True
+                    return response.json()
+                else:
+                    # TODO: Return error
+                    request_done = True
             return response
         return None
