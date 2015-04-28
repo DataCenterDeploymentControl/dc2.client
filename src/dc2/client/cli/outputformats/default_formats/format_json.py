@@ -27,6 +27,6 @@ def output_text(result, message):
     if result is False:
         print("Error: {0}".format(json.dumps(message)))
         return
-    print(json.dumps(message))
+    print(json.dumps(message, indent=4))
 
 add_output_format('json', output_text)
