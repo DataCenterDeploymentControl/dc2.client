@@ -26,10 +26,10 @@ except ImportError as e:
     raise e
 
 
-class Users(object):
+class Groups(object):
 
     _MODULE_NAME_ = 'admin'
-    _RESOURCE_NAME = 'users'
+    _RESOURCE_NAME = 'groups'
 
     def __init__(self, api=None):
         if api is None:
@@ -37,32 +37,34 @@ class Users(object):
         self._api = api
         self._url = self._api.url(self._MODULE_NAME_, self._RESOURCE_NAME)
 
-    def userlist(self, username=None, email=None):
+    def grouplist(self, groupname=None):
         response = None
-        if username is not None and email is None:
-            response = self._api.do_request(self._url, 'GET', data={'username': username}, auth=True)
-        elif username is None and email is not None:
-            response = self._api.do_request(self._url, 'GET', data={'email': email}, auth=True)
+        if groupname is not None:
+            response = self._api.do_request(self._url, 'GET', data={'groupname': groupname}, auth=True)
         else:
             response = self._api.do_request(self._url, 'GET', auth=True)
         if response is not None:
-            return (True, response)
-        else:
-            return (False, 'Error')
-
-    def useradd(self, user_rec=None):
-        if user_rec is not None:
-            response = self._api.do_request(self._url, 'POST', data=user_rec, auth=True)
-            if response is not None:
-                return (True, response)
-        return (False, 'Error')
-
-    def userdelete(self, user_id=None):
-        response = None
-        if user_id is not None:
-            response = self._api.do_request('{0}/{1}'.format(self._url, user_id), 'DELETE', auth=True)
+            return True, response
         else:
             return False, 'Error'
+
+    def groupadd(self, group_rec=None):
+        if group_rec is not None:
+            response = self._api.do_request(self._url, 'POST', data=group_rec, auth=True)
+            if response is not None:
+                return True, response
+        return False, response
+
+    def groupdelete(self, groupname=None):
+        response = None
+        if groupname is not None:
+            response = self._api.do_request(
+                '{0}/{1}'.format(self._url, groupname),
+                'DELETE',
+                auth=True
+            )
+        else:
+            return False, "Error"
         if response is not None:
             return True, response
         return False, 'Error'

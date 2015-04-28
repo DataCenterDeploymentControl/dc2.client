@@ -160,7 +160,7 @@ class API(object):
                 if method.lower() == 'put':
                     pass
                 if method.lower() == 'delete':
-                    pass
+                    response = requests.delete(url, data=json.dumps(data), auth=self._auth, headers=self.HEADERS)
                 if response.status_code == 401:
                     if auth:
                         self._authenticated = False
@@ -172,5 +172,6 @@ class API(object):
                 else:
                     # TODO: Return error
                     request_done = True
+                    return response.json()
             return response
         return None
