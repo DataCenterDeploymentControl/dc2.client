@@ -35,12 +35,22 @@ class Users(object):
         if api is None:
             raise ValueError('api instance can not be None')
         self._api = api
+        self._url = self._api.url(self._MODULE_NAME_, self._RESOURCE_NAME)
 
     def userlist(self, username=None, email=None):
-        if username is None and email is None:
-            url = self._api.url(self._MODULE_NAME_, self._RESOURCE_NAME)
-            response = self._api.do_request(url, 'GET', auth=True)
-            if response is not None:
-                return (True, response)
-            else:
-                return (False, 'Error')
+        response = None
+        if username is not None and email is None:
+            response = self._api.do_request(self._url, 'GET', data={'username': username}, auth=True)
+        elif username is None and email is not None:
+            response = self._api.do_request(self._url, 'GET', data={'email': email}, auth=True)
+        else:
+            response = self._api.do_request(self._url, 'GET', auth=True)
+        if response is not None:
+            return True, response
+        else:
+            return False, 'Error'
+
+    def useradd(self, user_rec=None):
+        if user_rec is not None:
+            response = self._api.do_request(self._url, 'POST', data=user_rec, auth=True)
+            return response
