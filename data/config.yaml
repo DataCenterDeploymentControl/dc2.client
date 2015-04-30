@@ -4,6 +4,6 @@ default:
     api_version: v1
   authentication:
     email: admin@domain.tld
-    password: RxurySXrcs3v
+    password: y2ibCso0be9n
     auth_method: local
     auth_cache_dir: ~/.dc2-client

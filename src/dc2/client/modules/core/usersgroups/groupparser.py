@@ -77,32 +77,6 @@ def group_parser(parser=None):
         metavar="FILENAME",
         help="Group JSON File"
     )
-
-    # user_list.add_argument(
-    #     '--find-username',
-    #     action="store",
-    #     default=None,
-    #     dest="user_username",
-    #     metavar="USERNAME",
-    #     help='Find User by Username'
-    # )
-    # user_list.add_argument(
-    #     '--find-email',
-    #     action="store",
-    #     default=None,
-    #     dest="user_email",
-    #     metavar="EMAIL ADDRESS",
-    #     help="Find User by eMail"
-    # )
-    # user_add = parser.add_argument_group('add', 'All "add user" options')
-    # user_add.add_argument(
-    #     '--users-file',
-    #     action="store",
-    #     dest="users_add_file",
-    #     default=None,
-    #     metavar="FILENAME",
-    #     help="Add users from file"
-    # )
     parser.set_defaults(parser_name="groups", func=process_groups)
 
 
@@ -167,8 +141,3 @@ def process_groups(args=None, api=None):
             if result is not None:
                 output(result, response, format="json")
 
-    #     elif args.user_delete is not None:
-    #         result = None
-    #         result, response = ctl_users.userdelete(user_id=args.user_delete)
-    #         if result is not None:
-    #             output(result, response, format="json")
